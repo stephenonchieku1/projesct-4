@@ -774,3 +774,326 @@ Migrating to AddColumnUserIdToStores (20221031131036)
   [1m[36mTRANSACTION (0.8ms)[0m  [1m[35mCOMMIT[0m
   [1m[35m (0.3ms)[0m  [1m[34mSELECT pg_advisory_unlock(1087325618115650655)[0m
   [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE DATABASE "react_rails_api_project_template_development" ENCODING = 'unicode'[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE DATABASE "react_rails_api_project_template_test" ENCODING = 'unicode'[0m
+Started POST "/auth/login" for 127.0.0.1 at 2022-12-09 05:54:14 +0300
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SessionsController#user_login as */*
+  Parameters: {"email"=>"test1234@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"test1234@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (1.1ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "test1234@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/sessions_controller.rb:36:in `user_login'
+Completed 401 Unauthorized in 20ms (Views: 0.6ms | ActiveRecord: 2.8ms | Allocations: 10271)
+
+
+Started POST "/signup" for 127.0.0.1 at 2022-12-09 05:55:43 +0300
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by UsersController#create as */*
+  Parameters: {"full_name"=>"kevo", "email"=>"kevo@gmail.com", "password"=>"[FILTERED]", "password_confirmation"=>"[FILTERED]", "role"=>"Admin", "user"=>{"full_name"=>"kevo", "email"=>"kevo@gmail.com", "role"=>"Admin"}}
+[31mUnpermitted parameter: :user[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/users_controller.rb:19:in `create'
+  [1m[36mUser Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "kevo@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:19:in `create'
+  [1m[36mUser Create (3.7ms)[0m  [1m[32mINSERT INTO "users" ("full_name", "email", "password_digest", "role", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"[0m  [["full_name", "kevo"], ["email", "kevo@gmail.com"], ["password_digest", "$2a$12$SPNDDnYHUtrDaN.K.hN.S.XgSVWQxvtbeRls5WbwWsjqu.xh.NwMe"], ["role", "Admin"], ["created_at", "2022-12-09 02:55:43.736442"], ["updated_at", "2022-12-09 02:55:43.736442"]]
+  ↳ app/controllers/users_controller.rb:19:in `create'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/users_controller.rb:19:in `create'
+  [1m[36mUser Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = $1 AND "users"."id" != $2 LIMIT $3[0m  [["email", "kevo@gmail.com"], ["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:20:in `create'
+[active_model_serializers]   [1m[36mStore Load (0.5ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:22:in `create'
+[active_model_serializers]   [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:22:in `create'
+[active_model_serializers]   [1m[36mClerk Load (0.6ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:22:in `create'
+[active_model_serializers]   [1m[36mItem Load (0.6ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:22:in `create'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.6ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:22:in `create'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (61.51ms)
+Completed 201 Created in 346ms (Views: 77.1ms | ActiveRecord: 17.7ms | Allocations: 43963)
+
+
+Started POST "/admin/login" for 127.0.0.1 at 2022-12-09 05:55:54 +0300
+  [1m[35m (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SessionsController#admin_login as */*
+  Parameters: {"email"=>"kevo@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"kevo@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mAdmin Load (0.3ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."email" = $1 LIMIT $2[0m  [["email", "kevo@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/sessions_controller.rb:20:in `admin_login'
+Completed 401 Unauthorized in 14ms (Views: 0.5ms | ActiveRecord: 1.5ms | Allocations: 9710)
+
+
+Started POST "/admin/login" for 127.0.0.1 at 2022-12-09 05:56:54 +0300
+  [1m[35m (0.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by SessionsController#admin_login as */*
+  Parameters: {"email"=>"kevo@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"kevo@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mAdmin Load (0.5ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."email" = $1 LIMIT $2[0m  [["email", "kevo@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/sessions_controller.rb:20:in `admin_login'
+Completed 401 Unauthorized in 19ms (Views: 0.6ms | ActiveRecord: 2.8ms | Allocations: 9715)
+
+
+Started POST "/auth/login" for 127.0.0.1 at 2022-12-09 05:57:00 +0300
+Processing by SessionsController#user_login as */*
+  Parameters: {"email"=>"kevo@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"kevo@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "kevo@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/sessions_controller.rb:36:in `user_login'
+[active_model_serializers]   [1m[36mStore Load (0.3ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mAdmin Load (0.2ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mClerk Load (0.3ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mItem Load (0.6ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.4ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (13.2ms)
+Completed 201 Created in 264ms (Views: 12.4ms | ActiveRecord: 2.0ms | Allocations: 7059)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2022-12-09 05:57:01 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:9:in `show'
+[active_model_serializers]   [1m[36mStore Load (0.4ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mAdmin Load (0.3ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mClerk Load (0.3ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mItem Load (0.4ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.4ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (34.99ms)
+Completed 201 Created in 53ms (Views: 30.3ms | ActiveRecord: 11.1ms | Allocations: 30522)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2022-12-09 05:57:01 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:9:in `show'
+[active_model_serializers]   [1m[36mStore Load (0.2ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mAdmin Load (0.2ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mClerk Load (0.2ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mItem Load (0.4ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.5ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (10.53ms)
+Completed 201 Created in 13ms (Views: 9.6ms | ActiveRecord: 1.7ms | Allocations: 6319)
+
+
+Started POST "/stores" for 127.0.0.1 at 2022-12-09 05:57:52 +0300
+Processing by StoresController#create as */*
+  Parameters: {"store_name"=>"quickmart", "location"=>"rongai", "description"=>"cash and pay supermarket", "user_id"=>"1", "store"=>{"store_name"=>"quickmart", "location"=>"rongai", "description"=>"cash and pay supermarket", "user_id"=>"1"}}
+[31mUnpermitted parameters: :user_id, :store[0m
+[active_model_serializers] Rendered StoreSerializer with ActiveModelSerializers::Adapter::Attributes (3.22ms)
+Completed 201 Created in 14ms (Views: 5.7ms | ActiveRecord: 1.3ms | Allocations: 6579)
+
+
+Started POST "/admins" for 127.0.0.1 at 2022-12-09 05:59:32 +0300
+Processing by AdminsController#create as */*
+  Parameters: {"full_name"=>"test", "email"=>"test1234@gmail.com", "password"=>"[FILTERED]", "store_id"=>1, "status"=>"active", "token"=>"[FILTERED]", "user_id"=>"1", "admin"=>{"full_name"=>"test", "email"=>"test1234@gmail.com", "store_id"=>1, "status"=>"active", "token"=>"[FILTERED]", "user_id"=>"1"}}
+[31mUnpermitted parameter: :admin[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mStore Load (0.2ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+Completed 500 Internal Server Error in 249ms (ActiveRecord: 0.5ms | Allocations: 10185)
+
+
+  
+NameError (undefined local variable or method `user' for #<AdminsController:0x00000000007e40>
+Did you mean?  super):
+  
+app/controllers/admins_controller.rb:10:in `create'
+Started POST "/admins" for 127.0.0.1 at 2022-12-09 06:02:43 +0300
+Processing by AdminsController#create as */*
+  Parameters: {"full_name"=>"test", "email"=>"test1234@gmail.com", "password"=>"[FILTERED]", "store_id"=>1, "status"=>"active", "token"=>"[FILTERED]", "user_id"=>"1", "admin"=>{"full_name"=>"test", "email"=>"test1234@gmail.com", "store_id"=>1, "status"=>"active", "token"=>"[FILTERED]", "user_id"=>"1"}}
+[31mUnpermitted parameter: :admin[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mStore Load (0.3ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+Completed 500 Internal Server Error in 272ms (ActiveRecord: 11.1ms | Allocations: 21734)
+
+
+  
+NameError (undefined local variable or method `user' for #<AdminsController:0x00000000009a10>
+Did you mean?  super):
+  
+app/controllers/admins_controller.rb:10:in `create'
+Started POST "/admins" for 127.0.0.1 at 2022-12-09 06:05:16 +0300
+Processing by AdminsController#create as */*
+  Parameters: {"full_name"=>"cee", "email"=>"cee@gmail.com", "password"=>"[FILTERED]", "store_id"=>1, "status"=>"active", "token"=>"[FILTERED]", "user_id"=>"1", "admin"=>{"full_name"=>"cee", "email"=>"cee@gmail.com", "store_id"=>1, "status"=>"active", "token"=>"[FILTERED]", "user_id"=>"1"}}
+[31mUnpermitted parameter: :admin[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mStore Load (0.2ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  ↳ app/controllers/admins_controller.rb:5:in `create'
+Completed 500 Internal Server Error in 293ms (ActiveRecord: 11.0ms | Allocations: 19841)
+
+
+  
+NameError (undefined local variable or method `user' for #<AdminsController:0x00000000009c90>
+Did you mean?  super):
+  
+app/controllers/admins_controller.rb:10:in `create'
+Started DELETE "/auth/logout" for 127.0.0.1 at 2022-12-09 06:05:35 +0300
+Processing by SessionsController#user_logout as */*
+Completed 204 No Content in 0ms (Allocations: 292)
+
+
+Started POST "/auth/login" for 127.0.0.1 at 2022-12-09 06:05:37 +0300
+Processing by SessionsController#user_login as */*
+  Parameters: {"email"=>"kevo@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"kevo@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.4ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "kevo@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/sessions_controller.rb:36:in `user_login'
+[active_model_serializers]   [1m[36mStore Load (0.3ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mAdmin Load (0.3ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mClerk Load (0.4ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mItem Load (6.8ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.5ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (75.01ms)
+Completed 201 Created in 342ms (Views: 70.0ms | ActiveRecord: 16.7ms | Allocations: 29243)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2022-12-09 06:05:37 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.2ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:9:in `show'
+[active_model_serializers]   [1m[36mStore Load (0.2ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mAdmin Load (0.3ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mClerk Load (0.4ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mItem Load (0.4ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.5ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (35.5ms)
+Completed 201 Created in 42ms (Views: 34.2ms | ActiveRecord: 6.0ms | Allocations: 19736)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2022-12-09 06:05:38 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:9:in `show'
+[active_model_serializers]   [1m[36mStore Load (0.2ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mAdmin Load (0.2ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mClerk Load (0.3ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mItem Load (0.3ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.3ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (17.18ms)
+Completed 201 Created in 21ms (Views: 17.1ms | ActiveRecord: 1.6ms | Allocations: 13991)
+
+
+Started DELETE "/auth/logout" for 127.0.0.1 at 2022-12-09 06:06:12 +0300
+Processing by SessionsController#user_logout as */*
+Completed 204 No Content in 12ms (ActiveRecord: 0.0ms | Allocations: 434)
+
+
+Started POST "/auth/login" for 127.0.0.1 at 2022-12-09 06:06:14 +0300
+Processing by SessionsController#user_login as */*
+  Parameters: {"email"=>"kevo@gmail.com", "password"=>"[FILTERED]", "session"=>{"email"=>"kevo@gmail.com", "password"=>"[FILTERED]"}}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."email" = $1 LIMIT $2[0m  [["email", "kevo@gmail.com"], ["LIMIT", 1]]
+  ↳ app/controllers/sessions_controller.rb:36:in `user_login'
+[active_model_serializers]   [1m[36mStore Load (0.3ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mAdmin Load (0.3ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mClerk Load (0.7ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mItem Load (0.4ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.4ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/sessions_controller.rb:39:in `user_login'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (39.1ms)
+Completed 201 Created in 308ms (Views: 34.1ms | ActiveRecord: 15.7ms | Allocations: 37462)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2022-12-09 06:06:15 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:9:in `show'
+[active_model_serializers]   [1m[36mStore Load (0.3ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mAdmin Load (0.3ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mClerk Load (0.3ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mItem Load (0.4ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.3ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (10.0ms)
+Completed 201 Created in 14ms (Views: 8.9ms | ActiveRecord: 1.9ms | Allocations: 6716)
+
+
+Started GET "/users/1" for 127.0.0.1 at 2022-12-09 06:06:15 +0300
+Processing by UsersController#show as */*
+  Parameters: {"id"=>"1"}
+  [1m[36mUser Load (0.3ms)[0m  [1m[34mSELECT "users".* FROM "users" WHERE "users"."id" = $1 LIMIT $2[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/users_controller.rb:9:in `show'
+[active_model_serializers]   [1m[36mStore Load (0.3ms)[0m  [1m[34mSELECT "stores".* FROM "stores" WHERE "stores"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mAdmin Load (0.2ms)[0m  [1m[34mSELECT "admins".* FROM "admins" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mClerk Load (0.5ms)[0m  [1m[34mSELECT "clerks".* FROM "clerks" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mItem Load (0.3ms)[0m  [1m[34mSELECT "items".* FROM "items" INNER JOIN "clerks" ON "items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers]   [1m[36mRequestedItem Load (0.3ms)[0m  [1m[34mSELECT "requested_items".* FROM "requested_items" INNER JOIN "clerks" ON "requested_items"."clerk_id" = "clerks"."id" INNER JOIN "admins" ON "clerks"."admin_id" = "admins"."id" WHERE "admins"."user_id" = $1[0m  [["user_id", 1]]
+[active_model_serializers]   ↳ app/controllers/users_controller.rb:11:in `show'
+[active_model_serializers] Rendered UserSerializer with ActiveModelSerializers::Adapter::Attributes (12.84ms)
+Completed 201 Created in 15ms (Views: 11.6ms | ActiveRecord: 1.9ms | Allocations: 6293)
+
+
+Started POST "/stores" for 127.0.0.1 at 2022-12-09 06:06:41 +0300
+Processing by StoresController#create as */*
+  Parameters: {"store_name"=>"quickmart", "location"=>"nairobi", "description"=>"supermarket", "user_id"=>"1", "store"=>{"store_name"=>"quickmart", "location"=>"nairobi", "description"=>"supermarket", "user_id"=>"1"}}
+[31mUnpermitted parameters: :user_id, :store[0m
+[active_model_serializers] Rendered StoreSerializer with ActiveModelSerializers::Adapter::Attributes (4.01ms)
+Completed 201 Created in 32ms (Views: 7.7ms | ActiveRecord: 6.1ms | Allocations: 6142)
+
+
+Started POST "/stores" for 127.0.0.1 at 2022-12-09 06:09:39 +0300
+Processing by StoresController#create as */*
+  Parameters: {"store_name"=>"Naivas", "location"=>"nairobi", "description"=>"Mall", "user_id"=>"1", "store"=>{"store_name"=>"Naivas", "location"=>"nairobi", "description"=>"Mall", "user_id"=>"1"}}
+[31mUnpermitted parameters: :user_id, :store[0m
+[active_model_serializers] Rendered StoreSerializer with ActiveModelSerializers::Adapter::Attributes (9.46ms)
+Completed 201 Created in 21ms (Views: 10.2ms | ActiveRecord: 3.7ms | Allocations: 13621)
+
+

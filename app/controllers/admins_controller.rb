@@ -4,12 +4,12 @@ class AdminsController < ApplicationController
   def create
     admin = Admin.create(admin_params)
     if admin.valid?
-        #session[:admin_id] = admin.id
+         session[:admin_id] = admin.id
         render json: admin, status: :created
     else
         render json: {errors: user.errors.full_messages}, status: :unprocessable_entity
     end
-    #render json: admin, status: :created
+    render json: admin, status: :created
   end
 
 
